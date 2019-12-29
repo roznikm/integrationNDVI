@@ -1,51 +1,34 @@
 library(tidyverse)
 
 ## Insert your file path to the data from your local computer
-## Set wd using setwd('path) /Users/uofm_research/Rprojects/MichaelWilton/
-filePath = './df250mCorn.csv'
-df <- read_csv(filePath)
+## Set wd using setwd('path) /Users/uofm_research/Rprojects/integrationNDVI/
+file_path_read = './df250mCorn.csv'
+file_path_write = './CornMaxNDVI.csv'
+df <- read_csv(file_path_read)
 df$date <- as.Date(with(df, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
-counties <- unique(df$GEOID)
-years <- unique(df$Year)
-listResults <- list() 
+df <- df %>% filter(Year > 2005)
+years_geoid_df <- group_split(df, Year, GEOID)
 
-for(j in 1:length(years)) {
-  results <- tibble(GEOID=NA, intNDVI=NA, yield=NA, planted=NA, Year=NA)
-  for(i in 1:length(counties)) {
-    id <- counties[i]
-    sing <- df %>% filter(GEOID ==id & Year == years[j])
-    if(nrow(sing) < 1 || sum(is.na(sing$NDVI)) > 15) {
-      results[i, 'GEOID'] <- sing$GEOID[1]
-      results[i, 'intNDVI'] <- NA
-      results[i, "yield"] <- sing$yield[1]
-      results[i, "planted"] <- sing$planted[1]
-      results[i, "Year"] <- sing$Year[1]
-    } else {
-      ind <- dplyr::select(sing, "NDVI", "date", "GEOID", "yield", "planted", "Year") 
-      ggplot(ind, aes(y=NDVI, x= date)) + geom_point()
-      ### add an index to be used in integration (can't use a date type for start or end)
-      ind$index <- 1:nrow(ind)
-      
-      ## scale NDVI back so we can interpret results better
-      ind$NDVI <- ind$NDVI/10000
-      
-      results[i, 1] <- ind$GEOID[1]
-      results[i,2] <- max(ind$NDVI)
-      results[i,3] <- ind$yield[1]
-      results[i, 4] <- ind$planted[1]
-      results[i, 5] <- ind$Year[1]
-    }
-  }
-  listResults[[j]] <- drop_na(results)
+calculate_max_ndvi = function(county_year) {
+  max_ndvi <- county_year[which.max(county_year$NDVI), ]
+  max_ndvi$NDVI <- max_ndvi$NDVI / 10000
+  return(max_ndvi)
 }
 
-resultsAllYears <- bind_rows(listResults)
-countiesFullHistory <- resultsAllYears %>% 
+results <- map(years_geoid_df, calculate_max_ndvi)
+results <- bind_rows(results)
+
+selected_counties <- results %>% 
   group_by(GEOID) %>% 
-  summarise(n=n()) %>% filter(n==19)
-resultsFullHistory <- resultsAllYears %>% filter(GEOID %in% countiesFullHistory$GEOID)
+  summarise(n=n()) %>% filter(n==13)
 
-write_csv(resultsFullHistory, "University of Manitoba -M/1.Thesis/Corn/maxNDVI.csv")
+results_full_history <- results %>% 
+                      filter(GEOID %in% selected_counties$GEOID)
 
-mod <- lm(yield ~ intNDVI,data=resultsFullHistory)
+write_csv(results_full_history, file_path_write)
+
+## Test max NDVI 
+mod <- lm(yield ~ NDVI + I(NDVI^2) + GEOID,data=results_full_history)
 summary(mod)
+
+
