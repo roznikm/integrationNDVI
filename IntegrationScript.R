@@ -1,24 +1,42 @@
 library(tidyverse)
 
-## Insert your file path to the data from your local computer 
-filePath = '/Users/lysaporth/Documents/SpatialTemporalRes/SpatialPaperData/FullFiles/df250mSoy.csv'
-df <- read_csv(filePath)
+## Insert your file path to the data from your local computer
+## Set wd using setwd('path) /Users/uofm_research/Rprojects/integrationNDVI/
+file_path_read = './df250mCorn.csv'
+file_path_write = './CornIntNDVI.csv'
+df <- read_csv(file_path_read)
 df$date <- as.Date(with(df, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
+df <- df %>% filter(Year > 2005)
+years_geoid_df <- group_split(df, Year, GEOID)
 
-sing <- df %>% filter(GEOID =='19001' & Year == 2017)
-ind <- dplyr::select(sing, "NDVI", "date") 
-ggplot(ind, aes(y=NDVI, x= date)) + geom_point()
-### add an index to be used in integration (can't use a date type for start or end)
-ind$index <- 1:nrow(ind)
+calculate_int_ndvi = function(county_year, start, end) {
+  if(is.na(county_year$NDVI)) {
+    county_year_output <- county_year[1,]
+    return(county_year_output)
+  }
+  county_year$NDVI <- county_year$NDVI /10000 
+  ndvi_func <- splinefun(1:nrow(county_year), y = county_year$NDVI, method = "fmm", ties = mean)
+  county_year_output <- county_year[1,]
+  county_year_output$NDVI <- integrate(ndvi_func,start,end)$value
+  return(county_year_output)
+}
 
-## scale NDVI back so we can interpret results better
-ind$NDVI <- ind$NDVI/10000
-fnToint <- splinefun(ind$index, y = ind$NDVI, method = "fmm", ties = mean)
+results <- map(years_geoid_df, calculate_int_ndvi, start=5, end = 10)
+results <- bind_rows(results) %>% 
+  drop_na(results)
 
-## Plot spline function to check it
-plot(ind$index, ind$NDVI)
-lines(spline(ind$index, ind$NDVI), col = 2)
+selected_counties <- results %>% 
+  group_by(GEOID) %>% 
+  summarise(n=n()) %>% filter(n==13)
 
-## Results seem about right, you can double check by taking a sum of the NDVI values
-## The integrated value should be similar
-integrate(fnToint,7,18)
+results_full_history <- results %>% 
+  filter(GEOID %in% selected_counties$GEOID)
+
+write_csv(results_full_history, file_path_write)
+
+## Test int NDVI 
+mod <- lm(yield ~ NDVI + I(NDVI^2) + GEOID,data=results_full_history)
+summary(mod)
+
+
+
