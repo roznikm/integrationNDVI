@@ -9,21 +9,21 @@ df$date <- as.Date(with(df, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
 df <- df %>% filter(Year > 2005)
 years_geoid_df <- group_split(df, Year, GEOID)
 
-calculate_int_ndvi = function(county_year, start, end) {
+calcIntegratedNdvi <- function(county_year, start, end) {
   if(is.na(county_year$NDVI)) {
     county_year_output <- county_year[1,]
     return(county_year_output)
   }
   county_year$NDVI <- county_year$NDVI /10000 
-  ndvi_func <- splinefun(1:nrow(county_year), y = county_year$NDVI, method = "fmm", ties = mean)
+  ndviFunc <- splinefun(1:nrow(county_year), y = county_year$NDVI, method = "fmm", ties = mean)
   county_year_output <- county_year[1,]
-  county_year_output$NDVI <- integrate(ndvi_func,start,end)$value
+  county_year_output$NDVI <- integrate(ndviFunc,start,end)$value
   return(county_year_output)
 }
 
-results <- map(years_geoid_df, calculate_int_ndvi, start=5, end = 10)
-results <- bind_rows(results) %>% 
-  drop_na(results)
+results <- map(years_geoid_df, calcIntegratedNdvi, start=5, end=10)
+results <- bind_rows(results) 
+results <- drop_na(results)
 
 selected_counties <- results %>% 
   group_by(GEOID) %>% 
@@ -35,7 +35,7 @@ results_full_history <- results %>%
 write_csv(results_full_history, file_path_write)
 
 ## Test int NDVI 
-mod <- lm(yield ~ NDVI + I(NDVI^2) + GEOID,data=results_full_history)
+mod <- lm(yield ~ NDVI + I(NDVI^2) + GEOID, data=results_full_history)
 summary(mod)
 
 
