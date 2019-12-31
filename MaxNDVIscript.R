@@ -9,13 +9,13 @@ df$date <- as.Date(with(df, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
 df <- df %>% filter(Year > 2005)
 years_geoid_df <- group_split(df, Year, GEOID)
 
-calculate_max_ndvi = function(county_year) {
+calculateMaxNdvi = function(county_year) {
   max_ndvi <- county_year[which.max(county_year$NDVI), ]
   max_ndvi$NDVI <- max_ndvi$NDVI / 10000
   return(max_ndvi)
 }
 
-results <- map(years_geoid_df, calculate_max_ndvi)
+results <- map(years_geoid_df, calculateMaxNdvi)
 results <- bind_rows(results)
 
 selected_counties <- results %>% 
