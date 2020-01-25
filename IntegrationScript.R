@@ -1,27 +1,37 @@
 library(tidyverse)
 
 ## Insert your file path to the data from your local computer
-## Set wd using setwd('path) /Users/uofm_research/Rprojects/integrationNDVI/
-file_path_read = './df250mCorn.csv'
-file_path_write = './CornIntNDVI.csv'
+## Pick Crop Type
+file_path_read <- '/Users/uofm_research/Rprojects/integrationNDVI/df250mCorn.csv'
+file_path_write <- '/Users/uofm_research/Rprojects/integrationNDVI/CornIntNDVI.csv'
+file_path_start_end_dates <- '/Users/uofm_research/Rprojects/integrationNDVI/CornStartAndEndDates.csv'
+
+start_end_dates <- read_csv(file_path_start_end_dates)
+start_end_dates$STATEFP <- as.character(start_end_dates$STATEFP)
+start_end_dates <- drop_na(start_end_dates)
+states <- unique(start_end_dates$STATEFP)
+
 df <- read_csv(file_path_read)
 df$date <- as.Date(with(df, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
-df <- df %>% filter(Year > 2005)
+df <- df %>% filter(Year > 2005 & STATEFP %in% states)
 years_geoid_df <- group_split(df, Year, GEOID)
 
-calcIntegratedNdvi <- function(county_year, start, end) {
-  if(is.na(county_year$NDVI)) {
+calcIntegratedNdvi <- function(county_year) {
+  if(sum(is.na(county_year$NDVI)) > 0)  {
     county_year_output <- county_year[1,]
     return(county_year_output)
   }
   county_year$NDVI <- county_year$NDVI /10000 
   ndviFunc <- splinefun(1:nrow(county_year), y = county_year$NDVI, method = "fmm", ties = mean)
   county_year_output <- county_year[1,]
+  start_and_end <- start_end_dates %>% filter(STATEFP == county_year_output$STATEFP & Year == county_year_output$Year)
+  start <- round(lubridate::yday(start_and_end$StartDate) / 8)
+  end <- round(lubridate::yday(start_and_end$EndDate) / 8)
   county_year_output$NDVI <- integrate(ndviFunc,start,end)$value
   return(county_year_output)
 }
 
-results <- map(years_geoid_df, calcIntegratedNdvi, start=5, end=10)
+results <- map(years_geoid_df, calcIntegratedNdvi)
 results <- bind_rows(results) 
 results <- drop_na(results)
 
