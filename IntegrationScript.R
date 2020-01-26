@@ -2,9 +2,9 @@ library(tidyverse)
 
 ## Insert your file path to the data from your local computer
 ## Pick Crop Type
-file_path_read <- '/Users/uofm_research/Rprojects/integrationNDVI/df250mCorn.csv'
-file_path_write <- '/Users/uofm_research/Rprojects/integrationNDVI/CornIntNDVI.csv'
-file_path_start_end_dates <- '/Users/uofm_research/Rprojects/integrationNDVI/CornStartAndEndDates.csv'
+file_path_read <- '/Users/uofm_research/Rprojects/integrationNDVI/df250mSpringWheat.csv'
+file_path_write <- '/Users/uofm_research/Rprojects/integrationNDVI/SpringWheatIntNDVI.csv'
+file_path_start_end_dates <- '/Users/uofm_research/Rprojects/integrationNDVI/SpringWheatStartAndEndDates.csv'
 
 start_end_dates <- read_csv(file_path_start_end_dates)
 start_end_dates$STATEFP <- as.character(start_end_dates$STATEFP)
@@ -25,8 +25,8 @@ calcIntegratedNdvi <- function(county_year) {
   ndviFunc <- splinefun(1:nrow(county_year), y = county_year$NDVI, method = "fmm", ties = mean)
   county_year_output <- county_year[1,]
   start_and_end <- start_end_dates %>% filter(STATEFP == county_year_output$STATEFP & Year == county_year_output$Year)
-  start <- round(lubridate::yday(start_and_end$StartDate) / 8)
-  end <- round(lubridate::yday(start_and_end$EndDate) / 8)
+  start <- round(lubridate::yday(start_and_end$StartDate) / 16)
+  end <- round(lubridate::yday(start_and_end$EndDate) / 16)
   county_year_output$NDVI <- integrate(ndviFunc,start,end)$value
   return(county_year_output)
 }
