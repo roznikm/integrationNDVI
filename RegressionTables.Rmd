@@ -1,0 +1,152 @@
+---
+title: "Micheal's Regression Tables"
+author: "Mitch Roznik"
+date: "2/2/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Regression Results for Four Crops
+The integration start dates are based on start dates of 70% planting progress, and end dates according to growing degree days. 
+
+## Corn
+Corn table
+\begin{table}[h!] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+\\[-1.8ex] & \multicolumn{2}{c}{Corn Yield} \\ 
+ & Integrated NDVI & Max NDVI \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ NDVI & 106.608$^{***}$ & $-$1,769.978$^{***}$ \\ 
+  & (3.544) & (69.445) \\ 
+  & & \\ 
+ NDVI-squared & $-$7.281$^{***}$ & 1,509.291$^{***}$ \\ 
+  & (0.286) & (44.649) \\ 
+  & & \\ 
+ Constant & $-$172.820$^{***}$ & 632.934$^{***}$ \\ 
+  & (12.362) & (27.485) \\ 
+  & & \\ 
+\textit{N} & 6,422 & 6,929 \\ 
+R$^{2}$ & 0.578 & 0.785 \\ 
+Adjusted R$^{2}$ & 0.543 & 0.767 \\ 
+Residual Std. Error & 21.153 (df = 5926) & 15.016 (df = 6394) \\ 
+F Statistic & 16.388$^{***}$ (df = 495; 5926) & 43.760$^{***}$ (df = 534; 6394) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Notes:} & \multicolumn{2}{r}{$^{***}$Significant at the 1 percent level.} \\ 
+ & \multicolumn{2}{r}{$^{**}$Significant at the 5 percent level.} \\ 
+ & \multicolumn{2}{r}{$^{*}$Significant at the 10 percent level.} \\ 
+\end{tabular} 
+\end{table} 
+\clearpage
+
+## Soybeans
+Soybean table
+\begin{table}[h!] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+\\[-1.8ex] & \multicolumn{2}{c}{Soybean Yield} \\ 
+ & Integrated NDVI & Max NDVI \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ NDVI & 12.519$^{***}$ & $-$257.613$^{***}$ \\ 
+  & (0.800) & (23.198) \\ 
+  & & \\ 
+ NDVI-squared & $-$1.301$^{***}$ & 251.170$^{***}$ \\ 
+  & (0.100) & (14.658) \\ 
+  & & \\ 
+ Constant & 25.570$^{***}$ & 92.499$^{***}$ \\ 
+  & (2.340) & (9.329) \\ 
+  & & \\ 
+\textit{N} & 7,280 & 7,345 \\ 
+R$^{2}$ & 0.573 & 0.771 \\ 
+Adjusted R$^{2}$ & 0.537 & 0.752 \\ 
+Residual Std. Error & 6.656 (df = 6718) & 4.950 (df = 6778) \\ 
+F Statistic & 16.058$^{***}$ (df = 561; 6718) & 40.383$^{***}$ (df = 566; 6778) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Notes:} & \multicolumn{2}{r}{$^{***}$Significant at the 1 percent level.} \\ 
+ & \multicolumn{2}{r}{$^{**}$Significant at the 5 percent level.} \\ 
+ & \multicolumn{2}{r}{$^{*}$Significant at the 10 percent level.} \\ 
+\end{tabular} 
+\end{table} 
+\clearpage
+
+## Winter Wheat 
+Winter wheat table
+\begin{table}[h!] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+\\[-1.8ex] & \multicolumn{2}{c}{Winter-Wheat Yield} \\ 
+ & Integrated NDVI & Max NDVI \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ NDVI & $-$0.488 & 163.705$^{***}$ \\ 
+  & (3.358) & (27.343) \\ 
+  & & \\ 
+ NDVI-squared & 0.042 & $-$75.077$^{***}$ \\ 
+  & (1.010) & (21.378) \\ 
+  & & \\ 
+ Constant & 56.867$^{***}$ & $-$19.338$^{**}$ \\ 
+  & (3.751) & (9.263) \\ 
+  & & \\ 
+\textit{N} & 1,807 & 1,807 \\ 
+R$^{2}$ & 0.753 & 0.791 \\ 
+Adjusted R$^{2}$ & 0.732 & 0.773 \\ 
+Residual Std. Error (df = 1666) & 9.658 & 8.886 \\ 
+F Statistic (df = 140; 1666) & 36.270$^{***}$ & 44.995$^{***}$ \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Notes:} & \multicolumn{2}{r}{$^{***}$Significant at the 1 percent level.} \\ 
+ & \multicolumn{2}{r}{$^{**}$Significant at the 5 percent level.} \\ 
+ & \multicolumn{2}{r}{$^{*}$Significant at the 10 percent level.} \\ 
+\end{tabular} 
+\end{table}
+\clearpage
+
+## Spring Wheat
+Spring wheat table
+\begin{table}[h!] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+\\[-1.8ex] & \multicolumn{2}{c}{Spring-Wheat Yield} \\ 
+ & Integrated NDVI & Max NDVI \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ NDVI & 76.225$^{***}$ & 79.227 \\ 
+  & (19.484) & (90.403) \\ 
+  & & \\ 
+ NDVI-squared & $-$14.413$^{***}$ & 13.513 \\ 
+  & (4.633) & (64.918) \\ 
+  & & \\ 
+ Constant & $-$36.167$^{*}$ & $-$17.612 \\ 
+  & (20.103) & (30.704) \\ 
+  & & \\ 
+\textit{N} & 286 & 286 \\ 
+R$^{2}$ & 0.221 & 0.422 \\ 
+Adjusted R$^{2}$ & 0.213 & 0.416 \\ 
+Residual Std. Error (df = 282) & 10.496 & 9.042 \\ 
+F Statistic (df = 3; 282) & 26.732$^{***}$ & 68.700$^{***}$ \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Notes:} & \multicolumn{2}{r}{$^{***}$Significant at the 1 percent level.} \\ 
+ & \multicolumn{2}{r}{$^{**}$Significant at the 5 percent level.} \\ 
+ & \multicolumn{2}{r}{$^{*}$Significant at the 10 percent level.} \\ 
+\end{tabular} 
+\end{table} 
+\clearpage

@@ -10,7 +10,7 @@ crop_progress_selection <- 70
 accumulated_gdd_selection <- 1825
 base_temp_selection <- 32
 #-------------------------------------
-prism <- read_csv("/Users/uofm_research/Rprojects/integrationNDVI/PrismDailyStatesClean.csv")
+prism <- read_csv("/Users/uofm_research/Rprojects/integrationNDVI/StartingData/PrismDailyStatesClean.csv")
 prism$Date <- as.Date(with(prism, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
 prism <- prism %>% select(-Month, -Day)
 crop_progress <- read_csv(paste0("/Users/uofm_research/Rprojects/integrationNDVI/", crop, "PlantingProgress.csv"))

@@ -2,9 +2,9 @@ library(tidyverse)
 
 ## Insert your file path to the data from your local computer
 ## Pick Crop Type
-file_path_read <- '/Users/uofm_research/Rprojects/integrationNDVI/df250mSpringWheat.csv'
+file_path_read <- '/Users/uofm_research/Rprojects/integrationNDVI/StartingData/df250mSpringWheat.csv'
 file_path_write <- '/Users/uofm_research/Rprojects/integrationNDVI/SpringWheatIntNDVI.csv'
-file_path_start_end_dates <- '/Users/uofm_research/Rprojects/integrationNDVI/SpringWheatStartAndEndDates.csv'
+file_path_start_end_dates <- '/Users/uofm_research/Rprojects/integrationNDVI/StartingData/SpringWheatStartAndEndDates.csv'
 
 start_end_dates <- read_csv(file_path_start_end_dates)
 start_end_dates$STATEFP <- as.character(start_end_dates$STATEFP)

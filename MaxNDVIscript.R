@@ -1,9 +1,8 @@
 library(tidyverse)
 
 ## Insert your file path to the data from your local computer
-## Set wd using setwd('path) /Users/uofm_research/Rprojects/integrationNDVI/
-file_path_read = './df250mCorn.csv'
-file_path_write = './CornMaxNDVI.csv'
+file_path_read = '/Users/uofm_research/Rprojects/integrationNDVI/StartingData/df250mCorn.csv'
+file_path_write = '/Users/uofm_research/Rprojects/integrationNDVI/CornMaxNDVI.csv'
 df <- read_csv(file_path_read)
 df$date <- as.Date(with(df, paste(Year, Month, Day,sep="-")), "%Y-%m-%d")
 df <- df %>% filter(Year > 2005)
