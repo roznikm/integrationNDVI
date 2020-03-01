@@ -1,5 +1,5 @@
 Papers/
-*.csv
+EndData/
 RegressionTables.log
 RegressionTables.pdf
 ResggresionTables.Rmd
